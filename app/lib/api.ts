@@ -55,20 +55,6 @@ class ApiService {
     })
   }
 
-  async refresh(refreshToken: string) {
-    return this.request('/api/auth/refresh', {
-      method: 'POST',
-      body: { refreshToken },
-    })
-  }
-
-  async logout(userId: string, refreshToken: string) {
-    return this.request('/api/auth/logout', {
-      method: 'POST',
-      body: { userId, refreshToken },
-    })
-  }
-
   async getMe(token: string) {
     return this.request('/api/user/me', { token })
   }
