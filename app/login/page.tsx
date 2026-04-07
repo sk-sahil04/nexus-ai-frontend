@@ -53,7 +53,7 @@ export default function LoginPage() {
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
             <span className="text-2xl font-bold">N</span>
           </div>
-          <span className="text-2xl font-bold">Nexus AI</span>
+          <span className="text-2xl font-bold">Sahilion AI</span>
         </Link>
 
         {/* Form Card */}
@@ -64,7 +64,7 @@ export default function LoginPage() {
           className="p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl"
         >
           <h1 className="text-2xl font-bold text-center mb-2">Welcome back</h1>
-          <p className="text-gray-400 text-center mb-6">Sign in to continue to Nexus AI</p>
+          <p className="text-gray-400 text-center mb-6">Sign in to continue to Sahilion AI</p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {error && (

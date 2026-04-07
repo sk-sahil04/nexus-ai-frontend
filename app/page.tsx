@@ -58,7 +58,7 @@ export default function HomePage() {
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
                 <span className="text-xl font-bold">N</span>
               </div>
-              <span className="font-bold text-xl">Nexus AI</span>
+              <span className="font-bold text-xl">Sahilion AI</span>
             </motion.div>
 
             <motion.div
@@ -299,10 +299,10 @@ export default function HomePage() {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
               <span className="font-bold text-sm">N</span>
             </div>
-            <span className="font-semibold">Nexus AI</span>
+            <span className="font-semibold">Sahilion AI</span>
           </div>
           <p className="text-sm text-gray-500">
-            © 2026 Nexus AI. All rights reserved.
+            © 2026 Sahilion AI. All rights reserved.
           </p>
         </div>
       </footer>

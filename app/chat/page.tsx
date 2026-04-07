@@ -453,7 +453,7 @@ export default function PremiumChatApp() {
                       <Sparkles className="w-5 h-5 text-white" />
                     </motion.div>
                     <div>
-                      <h1 className="font-bold text-lg">Nexus AI</h1>
+                      <h1 className="font-bold text-lg">Sahilion AI</h1>
                       <p className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>Premium Assistant</p>
                     </div>
                   </div>
@@ -688,7 +688,7 @@ export default function PremiumChatApp() {
                   transition={{ delay: 0.3 }}
                   className="text-3xl font-bold mb-3 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
                 >
-                  Welcome to Nexus AI
+                  Welcome to Sahilion AI
                 </motion.h2>
                 
                 <motion.p
@@ -835,7 +835,7 @@ export default function PremiumChatApp() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Message Nexus AI..."
+                  placeholder="Message Sahilion AI..."
                   rows={1}
                   className={`flex-1 resize-none bg-transparent border-0 outline-none text-sm placeholder:text-gray-500 min-h-[24px] max-h-[200px] disabled:opacity-50 ${
                     isDark ? 'text-white' : 'text-gray-900'
@@ -867,7 +867,7 @@ export default function PremiumChatApp() {
             </motion.div>
 
             <p className="text-center text-xs text-gray-500 mt-3">
-              Nexus AI can make mistakes. Consider checking important information.
+              Sahilion AI can make mistakes. Consider checking important information.
             </p>
           </div>
         </div>
