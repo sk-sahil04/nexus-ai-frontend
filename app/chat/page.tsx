@@ -392,129 +392,167 @@ export default function PremiumChatApp() {
       />
 
       {/* Gradient Orbs */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
-      </div>
-
-      {/* Sidebar Overlay */}
-      {isSidebarOpen && (
-        <div
-          className={`fixed inset-0 backdrop-blur-sm z-40 md:hidden ${
-            isDark ? 'bg-black/50' : 'bg-black/30'
-          }`}
-          onClick={() => setIsSidebarOpen(false)}
+      {/* Particle Canvas - Dark mode only */}
+      {isDark && (
+        <canvas
+          ref={canvasRef}
+          className="fixed inset-0 pointer-events-none opacity-50"
         />
       )}
 
-      {/* Sidebar */}
-      <aside
-        className={`fixed top-0 left-0 z-50 h-[100dvh] w-80 flex flex-col border-r transition-colors duration-300 transform ${
-          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } md:translate-x-0 md:static md:h-screen ${
-          isDark 
-            ? 'bg-[#202123] border-white/5' 
-            : 'bg-white border-gray-200'
-        }`}
-      >
+      {/* Cursor Glow */}
+      <motion.div
+        className="fixed w-64 h-64 rounded-full pointer-events-none hidden md:block"
+        style={{
+          x: cursorXSpring,
+          y: cursorYSpring,
+          background: 'radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%)',
+          translateX: '-50%',
+          translateY: '-50%'
+        }}
+      />
+
+      {/* Gradient Orbs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-indigo-500/20 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-purple-500/20 rounded-full blur-[120px] animate-pulse delay-1000" />
+      </div>
+
+      {/* Sidebar Overlay */}
+      <AnimatePresence>
+        {isSidebarOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className={`fixed inset-0 backdrop-blur-sm z-40 md:hidden ${
+                isDark ? 'bg-black/50' : 'bg-black/30'
+              }`}
+              onClick={() => setIsSidebarOpen(false)}
+            />
+            <motion.aside
+              initial={{ x: -320 }}
+              animate={{ x: 0 }}
+              exit={{ x: -320 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className={`fixed top-0 h-screen inset-y-0 left-0 z-50 w-80 flex flex-col backdrop-blur-xl border-r transition-colors duration-300 ${
+                isDark 
+                  ? 'bg-[#12121a]/95 border-white/10' 
+                  : 'bg-white/95 border-gray-200'
+              }`}
+            >
               {/* Sidebar Header */}
-              <div className={`p-3 border-b ${isDark ? 'border-white/5' : 'border-gray-200'}`}>
-                {/* Mobile Logo */}
-                <div className="flex items-center justify-between mb-3 md:hidden">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-indigo-500" />
-                    <span className="font-bold">Nexus AI</span>
+              <div className={`p-4 border-b ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <motion.div
+                      className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30"
+                      whileHover={{ scale: 1.05, rotate: 5 }}
+                    >
+                      <Sparkles className="w-5 h-5 text-white" />
+                    </motion.div>
+                    <div>
+                      <h1 className="font-bold text-lg">Nexus AI</h1>
+                      <p className={`text-xs ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>Premium Assistant</p>
+                    </div>
                   </div>
                   <button
-                    className={`p-2 rounded-lg ${isDark ? 'hover:bg-white/10' : 'hover:bg-gray-100'}`}
+                    className={`md:hidden p-2 rounded-lg ${isDark ? 'hover:bg-white/10' : 'hover:bg-gray-100'}`}
                     onClick={() => setIsSidebarOpen(false)}
                   >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
 
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={handleNewChat}
-                  className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg transition-colors ${
-                    isDark 
-                      ? 'bg-white/10 hover:bg-white/15 text-white' 
-                      : 'bg-gray-100 hover:bg-gray-200 text-gray-800'
-                  }`}
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 hover:border-indigo-500/50 transition-all"
                 >
-                  <Plus className="w-4 h-4" />
-                  <span className="text-sm font-medium">New Chat</span>
-                </button>
+                  <Plus className="w-5 h-5" />
+                  <span className="font-medium">New Chat</span>
+                </motion.button>
               </div>
 
               {/* Chat List */}
-              <div className="flex-1 overflow-y-auto">
+              <div className="flex-1 overflow-y-auto p-3 space-y-2">
+                <p className={`text-xs uppercase tracking-wider px-2 mb-2 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>Recent Chats</p>
+                
                 {isLoadingChats ? (
-                  <div className="p-3 space-y-2">
+                  <div className="space-y-2">
                     {[1, 2, 3].map((i) => (
-                      <div key={i} className={`h-11 rounded-lg animate-pulse ${isDark ? 'bg-white/5' : 'bg-gray-200'}`} />
+                      <div key={i} className={`h-12 rounded-xl animate-pulse ${isDark ? 'bg-white/5' : 'bg-gray-200'}`} />
                     ))}
                   </div>
                 ) : chats.length === 0 ? (
-                  <div className={`p-4 text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                    <p className="text-sm">No conversations</p>
+                  <div className={`text-center py-8 ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>
+                    <MessageSquare className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                    <p className="text-sm">No conversations yet</p>
+                    <p className="text-xs mt-1">Start a new chat to begin</p>
                   </div>
                 ) : (
-                  <div className="p-2">
-                    <p className={`text-xs px-3 py-2 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>Today</p>
-                    {chats.map((chat, index) => (
-                      <motion.button
-                        key={chat.id}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: index * 0.02 }}
-                        onClick={() => handleSelectChat(chat)}
-                        className={`group w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors mb-1 ${
-                          currentChat?.id === chat.id
-                            ? isDark
-                              ? 'bg-white/10 text-white'
-                              : 'bg-gray-100 text-gray-900'
-                            : isDark
-                              ? 'text-gray-300 hover:bg-white/5'
-                              : 'text-gray-700 hover:bg-gray-100'
-                        }`}
+                  chats.map((chat, index) => (
+                    <motion.div
+                      key={chat.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                      className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all ${
+                        currentChat?.id === chat.id
+                          ? 'bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-500/30'
+                          : isDark ? 'hover:bg-white/5' : 'hover:bg-gray-100'
+                      }`}
+                      onClick={() => handleSelectChat(chat)}
+                    >
+                      <MessageSquare className={`w-4 h-4 shrink-0 ${
+                        currentChat?.id === chat.id ? 'text-indigo-400' : 'text-gray-500'
+                      }`} />
+                      <span className="flex-1 truncate text-sm">{chat.title}</span>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className={`h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity ${isDark ? 'hover:bg-red-500/10' : 'hover:bg-red-50'} rounded-lg`}
+                        onClick={(e) => handleDeleteChat(chat.id, e)}
                       >
-                        <MessageSquare className="w-4 h-4 shrink-0" />
-                        <span className="flex-1 truncate text-sm">{chat.title}</span>
-                        <button
-                          className={`p-1.5 rounded opacity-0 group-hover:opacity-100 transition-opacity ${
-                            isDark ? 'hover:bg-red-500/20' : 'hover:bg-red-50'
-                          }`}
-                          onClick={(e) => handleDeleteChat(chat.id, e)}
-                        >
-                          <Trash2 className={`w-3.5 h-3.5 ${isDark ? 'text-gray-500 hover:text-red-400' : 'text-gray-400 hover:text-red-500'}`} />
-                        </button>
-                      </motion.button>
-                    ))}
-                  </div>
+                        <Trash2 className={`w-4 h-4 ${isDark ? 'text-red-400' : 'text-red-500'}`} />
+                      </Button>
+                    </motion.div>
+                  ))
                 )}
               </div>
 
               {/* User Profile */}
-              <div className={`p-3 border-t ${isDark ? 'border-white/5' : 'border-gray-200'}`}>
-                <button
-                  onClick={handleLogout}
-                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
-                    isDark 
-                      ? 'text-gray-300 hover:bg-white/5' 
-                      : 'text-gray-700 hover:bg-gray-100'
-                  }`}
-                >
-                  <LogOutIcon className="w-4 h-4" />
-                  <span className="text-sm">{user.name || 'Sign out'}</span>
-                </button>
+              <div className="p-4 border-t border-white/10">
+                <div className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-colors">
+                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                    <span className="text-sm font-medium">{user.name?.charAt(0) || user.email?.charAt(0)}</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium truncate">{user.name || 'User'}</p>
+                    <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-gray-400 hover:text-red-400"
+                    onClick={handleLogout}
+                  >
+                    <LogOutIcon className="w-5 h-5" />
+                  </Button>
+                </div>
               </div>
-            </aside>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Main Content */}
       <main className={`flex-1 flex flex-col h-screen transition-all duration-300 ${isSidebarOpen ? 'md:pl-80' : ''}`}>
         {/* Top Bar */}
-        <header className={`flex items-center justify-between px-4 py-2 border-b transition-colors duration-300 ${
-          isDark ? 'bg-[#323233] border-white/10' : 'bg-white border-gray-200'
+        <header className={`flex items-center justify-between px-4 py-3 border-b backdrop-blur-xl transition-colors duration-300 ${
+          isDark ? 'bg-[#0a0a0f]/95 border-white/10' : 'bg-white/80 border-gray-200'
         }`}>
           <div className="flex items-center gap-3">
             <button
@@ -628,53 +666,63 @@ export default function PremiumChatApp() {
 
         {/* Messages Area */}
         <div className="flex-1 overflow-y-auto">
-          <div className="max-w-3xl mx-auto px-4 py-6">
+          <div className="max-w-4xl mx-auto px-4 py-6">
             {messages.length === 0 ? (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`flex flex-col items-center justify-center h-full min-h-[60vh] ${isDark ? 'text-white' : 'text-gray-900'}`}
+                className="flex flex-col items-center justify-center h-full min-h-[60vh]"
               >
                 <motion.div
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: 0.2 }}
-                  className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center mb-6"
+                  className="w-20 h-20 rounded-3xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mb-6 shadow-2xl shadow-indigo-500/30"
                 >
-                  <Sparkles className="w-8 h-8 text-white" />
+                  <Sparkles className="w-10 h-10 text-white" />
                 </motion.div>
                 
                 <motion.h2
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3 }}
-                  className={`text-2xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}
+                  className="text-3xl font-bold mb-3 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
                 >
-                  How can I help you today?
+                  Welcome to Nexus AI
                 </motion.h2>
+                
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                  className="text-gray-500 text-center max-w-md mb-8"
+                >
+                  Your premium AI assistant powered by advanced language models. 
+                  Ask me anything and experience the future of conversation.
+                </motion.p>
 
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
-                  className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-2xl mt-4"
+                  className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full max-w-2xl"
                 >
                   {[
-                    'Explain quantum computing',
-                    'Write Python code',
-                    'Help me brainstorm',
-                    'Summarize this text'
+                    'Write a Python function to sort a list',
+                    'Explain quantum computing simply',
+                    'Help me debug this code',
+                    'Write a creative short story'
                   ].map((suggestion, i) => (
                     <motion.button
                       key={i}
-                      whileHover={{ scale: 1.02 }}
+                      whileHover={{ scale: 1.02, y: -2 }}
                       whileTap={{ scale: 0.98 }}
                       transition={{ type: 'spring', stiffness: 400, damping: 17 }}
                       onClick={() => setInput(suggestion)}
                       className={`p-4 rounded-xl border text-left text-sm transition-all ${
                         isDark 
-                          ? 'bg-[#40414f] border-white/10 hover:border-white/20' 
-                          : 'bg-gray-100 border-gray-200 hover:border-gray-300'
+                          ? 'border-white/10 bg-white/5 hover:bg-white/10 hover:border-indigo-500/50' 
+                          : 'border-gray-200 bg-gray-100 hover:bg-gray-200 hover:border-indigo-500/50'
                       }`}
                     >
                       {suggestion}
@@ -707,28 +755,28 @@ export default function PremiumChatApp() {
                       )}
                     </motion.div>
 
-                    <div className={`flex-1 max-w-[85%] ${message.role === 'user' ? 'text-right' : ''}`}>
+                    <div className={`flex-1 max-w-3xl ${message.role === 'user' ? 'text-right' : ''}`}>
                       <div className={`inline-block p-4 rounded-2xl text-left ${
                         message.role === 'user'
                           ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white'
                           : isDark
-                            ? 'bg-[#1e1e2e] border border-white/10'
+                            ? 'bg-white/5 border border-white/10'
                             : 'bg-gray-100 border border-gray-200'
                       }`}>
-                        <p className={`whitespace-pre-wrap leading-relaxed text-base ${isDark ? 'text-gray-100' : 'text-gray-800'}`}>
+                        <p className={`whitespace-pre-wrap leading-relaxed ${isDark ? 'text-white' : 'text-gray-900'}`}>
                           {message.content}
                           {isStreaming && index === messages.length - 1 && message.role === 'assistant' && !message.content && (
                             <motion.span
                               animate={{ opacity: [0, 1, 0] }}
                               transition={{ repeat: Infinity, duration: 1 }}
-                              className="inline-block w-2 h-5 ml-1 bg-indigo-400"
+                              className="inline-block w-2 h-4 ml-1 bg-indigo-500"
                             />
                           )}
                           {isStreaming && index === messages.length - 1 && message.role === 'assistant' && message.content && (
                             <motion.span
                               animate={{ opacity: [0, 1, 0] }}
                               transition={{ repeat: Infinity, duration: 0.8 }}
-                              className="inline-block w-2 h-5 ml-1 bg-indigo-400"
+                              className="inline-block w-2 h-4 ml-1 bg-indigo-500"
                             />
                           )}
                         </p>
@@ -763,22 +811,22 @@ export default function PremiumChatApp() {
           </div>
         </div>
 
-        {/* Input Area */}
-        <div className={`p-3 border-t transition-colors duration-300 ${
-          isDark ? 'border-white/5 bg-[#323233]' : 'border-gray-200 bg-white'
-        }`}>
+        {/* Input Area - Fixed at bottom */}
+        <div className={`sticky bottom-0 p-4 border-t transition-colors duration-300 ${
+          isDark ? 'border-white/10 bg-[#0a0a0f]/95' : 'border-gray-200 bg-white/95'
+        } backdrop-blur-xl`}>
           <div className="max-w-4xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`relative rounded-xl border overflow-hidden transition-all duration-300 ${
+              className={`relative rounded-2xl border backdrop-blur-xl overflow-hidden transition-all duration-300 ${
                 isDark
                   ? isStreaming 
-                    ? 'bg-[#40414f] border-white/10' 
-                    : 'bg-[#40414f] border-white/10 focus-within:border-indigo-500/30'
+                    ? 'bg-white/5 border-white/10' 
+                    : 'bg-white/5 border-white/10 focus-within:border-indigo-500/50 focus-within:bg-white/10'
                   : isStreaming
                     ? 'bg-gray-100 border-gray-200'
-                    : 'bg-gray-100 border-gray-200 focus-within:border-indigo-500/30'
+                    : 'bg-gray-100 border-gray-200 focus-within:border-indigo-500/50'
               }`}
             >
               <div className="flex items-end gap-2 p-3">
