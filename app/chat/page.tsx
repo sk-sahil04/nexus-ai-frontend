@@ -44,7 +44,7 @@ interface Chat {
 export default function PremiumChatApp() {
   const router = useRouter()
   const { user, token, isLoading, logout } = useAuth()
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [isDark, setIsDark] = useState(true)
   const [chats, setChats] = useState<Chat[]>([])
   const [currentChat, setCurrentChat] = useState<Chat | null>(null)
@@ -397,30 +397,26 @@ export default function PremiumChatApp() {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
       </div>
 
+      {/* Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div
+          className={`fixed inset-0 backdrop-blur-sm z-40 md:hidden ${
+            isDark ? 'bg-black/50' : 'bg-black/30'
+          }`}
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <AnimatePresence>
-        {isSidebarOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className={`fixed inset-0 backdrop-blur-sm z-40 md:hidden ${
-                isDark ? 'bg-black/50' : 'bg-black/30'
-              }`}
-              onClick={() => setIsSidebarOpen(false)}
-            />
-            <motion.aside
-              initial={{ x: -320 }}
-              animate={{ x: 0 }}
-              exit={{ x: -320 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className={`fixed top-0 h-screen inset-y-0 left-0 z-50 w-80 flex flex-col backdrop-blur-xl border-r transition-colors duration-300 ${
-                isDark 
-                  ? 'bg-[#12121a]/95 border-white/10' 
-                  : 'bg-white/95 border-gray-200'
-              }`}
-            >
+      <aside
+        className={`fixed top-0 left-0 z-50 h-[100dvh] w-80 flex flex-col backdrop-blur-xl border-r transition-colors duration-300 transform ${
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        } md:translate-x-0 md:static md:h-screen ${
+          isDark 
+            ? 'bg-[#12121a]/95 border-white/10' 
+            : 'bg-white/95 border-gray-200'
+        }`}
+      >
               {/* Sidebar Header */}
               <div className={`p-4 border-b ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
                 <div className="flex items-center justify-between mb-4">
@@ -501,8 +497,8 @@ export default function PremiumChatApp() {
               </div>
 
               {/* User Profile */}
-              <div className="p-4 border-t border-white/10">
-                <div className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/5 transition-colors">
+              <div className={`p-3 border-t ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
+                <div className={`flex items-center gap-3 p-2 rounded-xl transition-colors ${isDark ? 'hover:bg-white/5' : 'hover:bg-gray-100'}`}>
                   <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
                     <span className="text-sm font-medium">{user.name?.charAt(0) || user.email?.charAt(0)}</span>
                   </div>
@@ -510,20 +506,15 @@ export default function PremiumChatApp() {
                     <p className="text-sm font-medium truncate">{user.name || 'User'}</p>
                     <p className="text-xs text-gray-500 truncate">{user.email}</p>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-gray-400 hover:text-red-400"
+                  <button
+                    className={`p-2 rounded-lg transition-colors ${isDark ? 'hover:bg-white/10 text-gray-400 hover:text-red-400' : 'hover:bg-gray-200 text-gray-500 hover:text-red-500'}`}
                     onClick={handleLogout}
                   >
                     <LogOutIcon className="w-5 h-5" />
-                  </Button>
+                  </button>
                 </div>
               </div>
-            </motion.aside>
-          </>
-        )}
-      </AnimatePresence>
+            </aside>
 
       {/* Main Content */}
       <main className={`flex-1 flex flex-col h-screen transition-all duration-300 ${isSidebarOpen ? 'md:pl-80' : ''}`}>
