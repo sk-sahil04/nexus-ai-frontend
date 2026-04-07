@@ -1,12 +1,28 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from './lib/auth-context'
 
 export default function HomePage() {
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false)
+      }
+    }
+    if (isDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isDropdownOpen])
 
   const handleStartChat = () => {
     if (user) {
@@ -14,6 +30,11 @@ export default function HomePage() {
     } else {
       window.location.href = '/login'
     }
+  }
+
+  const handleLogout = () => {
+    logout()
+    window.location.href = '/'
   }
 
   return (
@@ -46,12 +67,40 @@ export default function HomePage() {
               className="flex items-center gap-4"
             >
               {user ? (
-                <Link 
-                  href="/chat"
-                  className="px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors"
-                >
-                  Go to Chat
-                </Link>
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-semibold cursor-pointer hover:scale-105 transition-transform"
+                  >
+                    {user.name?.charAt(0) || user.email?.charAt(0) || 'U'}
+                  </button>
+                  
+                  <AnimatePresence>
+                    {isDropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95, y: -5 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: -5 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute right-0 mt-2 w-56 rounded-xl shadow-2xl overflow-hidden z-50 bg-zinc-900/95 backdrop-blur-md border border-white/10"
+                      >
+                        <div className="px-4 py-3 border-b border-white/10">
+                          <p className="font-medium text-white">{user.name || 'User'}</p>
+                          <p className="text-sm text-gray-400 truncate">{user.email}</p>
+                        </div>
+                        <button
+                          onClick={handleLogout}
+                          className="w-full text-left px-4 py-2.5 text-red-400 hover:bg-white/10 transition rounded-b-xl flex items-center gap-2"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                          </svg>
+                          Logout
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               ) : (
                 <>
                   <Link 
