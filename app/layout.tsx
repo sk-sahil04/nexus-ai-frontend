@@ -6,23 +6,23 @@ import { AuthProvider } from './lib/auth-context'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://sahilion-ai.vercel.app'),
-  title: 'Sahilion AI – Smart AI Chatbot by Sahil Analytics',
-  description: 'Sahilion AI is a powerful AI chatbot platform built by Sahil Analytics. Fast, smart and intelligent assistant for everyone.',
-  keywords: ['Sahilion AI', 'Sahil AI', 'AI chatbot India', 'Sahil Analytics', 'smart AI assistant', 'chatbot by Sahil', 'AI chat', 'artificial intelligence', 'machine learning'],
+  metadataBase: new URL('https://ai.sahilanalytics.me'),
+  title: 'Sahilion AI – Advanced AI Chatbot by Sahil Analytics',
+  description: 'Sahilion AI is an advanced AI chatbot developed by Sahil Analytics. Fast, intelligent and powerful assistant for chat, automation and smart solutions.',
+  keywords: ['Sahilion AI', 'AI chatbot India', 'Sahil Analytics', 'smart AI assistant', 'chatbot app', 'AI assistant', 'automation AI'],
   authors: [{ name: 'Sahil Analytics' }],
   openGraph: {
-    title: 'Sahilion AI – Smart AI Chatbot by Sahil Analytics',
-    description: 'Sahilion AI is a powerful AI chatbot platform built by Sahil Analytics. Fast, smart and intelligent assistant for everyone.',
-    url: 'https://sahilion-ai.vercel.app',
+    title: 'Sahilion AI – Advanced AI Chatbot by Sahil Analytics',
+    description: 'Sahilion AI is an advanced AI chatbot developed by Sahil Analytics. Fast, intelligent and powerful assistant.',
+    url: 'https://ai.sahilanalytics.me',
     siteName: 'Sahilion AI',
     type: 'website',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Sahilion AI – Smart AI Chatbot by Sahil Analytics',
-    description: 'Sahilion AI is a powerful AI chatbot platform built by Sahil Analytics.',
+    title: 'Sahilion AI – Advanced AI Chatbot by Sahil Analytics',
+    description: 'Fast, intelligent and powerful AI assistant by Sahil Analytics.',
     creator: '@sahilanalytics',
   },
   robots: {
